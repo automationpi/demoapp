@@ -1,13 +1,90 @@
-Area,Category,Maturity Values,Maturity Level 1,Maturity Level 2,Maturity Level 3,Maturity Level 4,Maturity Level 5
-Development,Source Control,1,Established branching process,Pre-tested commits goes in,Practice of structured comments during commits followed,Commits linked to tasks,DB scripts including Schema version controlled
-Development,Build,1,Standardized build environment,"CI established  for on commit, nightly builds",Build artifacts published to artifacts repository,Configuration externalized,Same build across environments
-Development,Code Quality,2,No Code Quality Checks Performed,Manual or adhoc code quality checks,Code Quality checks carried as part of build process,Gating procedure established based on Code Quality,"Code quality rigor followed diligently with trending, rules reviews regularly"
-Development,Unit Test,4,No unit tests are performed,Unit testing carrie in adhoc manner,TDD with 50-70 % coverage,70-90 % unit test coverage,100% coverage
-Test,System Test,4,No automated system testing followed,Automated System test carried in adhoc manner,Automated system tests with 50-70% coverage,Automated system test with 70-90% coverage,100% coverage
-Test,Performance Test,3,Performance Testing not carried,Performance Testing handled in adhoc manner,Performance Test carried in structured manner,"Performance Test included in the CI, CD process for execution",Performance Tests optimized to streamline overall delivery cycle and performance test defects feedback to team backlog
-Test,Security Test,5,Security testing is not carried,Security testing is handled in adhoc manner,Security testing is carried in structured manner,Security testing included in the CI and CD process for automated execution,Security testing optimized to streamline overall delivery cycle and security test defects feedback to team backlog
-Test,Test Data Management,5,No dedicated team to handle test data ,Dedicated team to handle test data through use of customer scripts and in adhoc manner,Structured Test data management practice through use of tools,Test data managed effectively and use of service virtualization,Test data versioning and test data management synchronized with agile delivery
-Release & Deploy,Release Automation & Deployment,2,Manual Deployment,Unstructured scripted deployment. Automation in pockets,Fully automated deployment,Fully automated deployment for most part of the application and across all environments with same deployment recipe across different environments. Manul gating. ,Fully automated deployment including database. Automated gating for code promotion
-Environment Management,Environment provisioning,3,Adhoc environment provisioning,Documented environment provisioning procedures,Some level of automated environment provisioning,Orchestrated environment provisioning,On Demand environment provisioning
-Environment Management,Platform provisioning,2,Adhoc platform provisioning,Documented platform provisioning procedures,Some level of automated platform provisioning,Orchestrated platform provisioning,On Demand platform provisioning
-Environment Management,Monitoring non production environment,3,No monitoring,Some level of adhoc monitoring,Structured environment monitoring with appropriate alerts and notifications,Environment monitoring optimized for greater availability and reliability,"Self serviced, self corrective monitoring"
+import java.io.File;
+import java.io.RandomAccessFile;
+import java.util.Scanner;
+
+public class Main {
+
+    static String testngXML = "";
+
+    static void createTestNG(String testName,String testId){
+
+        testngXML = testngXML + "<test name='"+testName+"'>\n" +
+                "        <parameter name='testname' value='"+testName+"' />\n" +
+                "        <parameter name='testid' value='"+testId+"' />\n" +
+                "        <classes>\n" +
+                "            <class name='TestDriver'>\n" +
+                "                <methods>\n" +
+                "                    <include name='Dolphin' />\n" +
+                "                </methods>\n" +
+                "            </class>\n" +
+                "        </classes>\n" +
+                "    </test>\n\n\n\n";
+
+    }
+
+
+    public static void main(String[] args) {
+
+        String fileName = "./file.nntest";
+
+        try{
+            RandomAccessFile rf = new RandomAccessFile("./file.no", "rw");
+            File myFile = new File(fileName);
+            Scanner scan = new Scanner(myFile);
+            String[] split;
+
+            int flag = 0;
+            String testName = "";
+            String testID = "";
+
+            while (scan.hasNextLine()) {
+                String line = scan.nextLine();
+
+
+                if(line.startsWith("-")) {
+                    testName = line.substring(1);
+                    flag = 1;
+                }
+
+                if(line.startsWith("#")) {
+                    testID = line.substring(1);
+                    flag = 2;
+                }
+
+                if(flag==2){
+                    createTestNG(testName,testID);
+                    testID="";
+                    testName = "";
+                    flag=0;
+                }
+
+
+
+                else if (line.equalsIgnoreCase("")){
+                    if(flag==1){
+                        createTestNG(testName,testID);
+                        testID="";
+                        testName = "";
+                        flag=0;
+                    }
+                }
+            }
+
+            if(flag==1){
+                createTestNG(testName,testID);
+                testID="";
+                testName = "";
+                flag=0;
+            }
+
+            scan.close();
+
+            System.out.print(testngXML);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+
+        }
+
+
+    }
+}
