@@ -1,0 +1,12 @@
+flowchart TD
+    A[User accesses Airline.php] --> B[Display airline options]
+    B --> C[User selects an airline]
+    C --> D[Airlinedisplay.php processes selection]
+    D --> E[Display airline details]
+    E --> F[User navigates to Airport options]
+    F --> G[User selects an airport]
+    G --> H[Airportdisplay.php processes selection]
+    H --> I[Display airport details]
+    I --> J[User requests analysis]
+    J --> K[Analytical.php performs analysis]
+    K --> L[Display analytical results]

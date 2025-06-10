@@ -1,0 +1,69 @@
+graph TD
+    subgraph "Main Components"
+        AirlinePHP[Airline.php]
+        AirlinedisplayPHP[Airlinedisplay.php]
+        AirportPHP[Airport.php]
+        AirportdisplayPHP[Airportdisplay.php]
+        AnalyticalPHP[Analytical.php]
+        HomePHP[Home.php]
+        RoutePHP[Route.php]
+        RoutesdisplayPHP[Routesdisplay.php]
+        airlinesearchPHP[airlinesearch.php]
+        airportsearchPHP[airportsearch.php]
+        dicePHP[dice.php]
+        drillPHP[drill.php]
+        drillupPHP[drillup.php]
+        iternaryPHP[iternary.php]
+        imagesAutocompletePHP[images/autocomplete.php]
+        imagesDemoPHP[images/demo.php]
+        jsApp[js/app.js]
+        jsHelper[js/helper.js]
+        readmeMD[readme.md]
+        readmeMD2[Readme.md]
+    end
+
+    subgraph "Frontend"
+        HTML[HTML]
+        CSS[CSS]
+        JavaScript[JavaScript]
+        JSON[JSON]
+    end
+
+    subgraph "Assets"
+        Images[images/]
+        Scripts[js/]
+    end
+
+    %% Relationships between PHP files and frontend components
+    HomePHP -->|renders|HTML
+    AirlinedisplayPHP -->|renders|HTML
+    AirportdisplayPHP -->|renders|HTML
+    RoutesdisplayPHP -->|renders|HTML
+    iternaryPHP -->|renders|HTML
+    jsApp -->|interacts with|HTML
+    jsHelper -->|used by|jsApp
+    imagesAutocompletePHP -->|used by|HTML
+    imagesDemoPHP -->|used by|HTML
+
+    %% Data flow and dependencies
+    AirlinePHP -->|uses|JSON
+    AirportPHP -->|uses|JSON
+    RoutePHP -->|uses|JSON
+    AnalyticalPHP -->|uses|JSON
+    airlinesearchPHP -->|queries|AirlinePHP
+    airportsearchPHP -->|queries|AirportPHP
+    dicePHP -->|uses|JavaScript
+    drillPHP -->|uses|JavaScript
+    drillupPHP -->|uses|JavaScript
+    iternaryPHP -->|uses|JavaScript
+
+    %% Assets and scripts
+    jsApp -->|loads|jsHelper
+    jsApp -->|loads|js/package.json
+    jsApp -->|loads|js/package-lock.json
+    imagesAutocompletePHP -->|uses|images/autocomplete.php
+    imagesDemoPHP -->|uses|images/demo.php
+
+    %% External dependencies
+    readmeMD -->|documentation|Readme.md
+    readmeMD2 -->|documentation|Readme.md
